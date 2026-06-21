@@ -13,15 +13,15 @@ properties:
   cooldown-ms:
     type: int
     required: true
-  swipe-left-behavior:
+  swipe-left-behaviors:
     type: phandle-array
     required: false
-  swipe-right-behavior:
+  swipe-right-behaviors:
     type: phandle-array
     required: false
-  swipe-up-behavior:
+  swipe-up-behaviors:
     type: phandle-array
     required: false
-  swipe-down-behavior:
+  swipe-down-behaviors:
     type: phandle-array
     required: false

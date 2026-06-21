@@ -110,10 +110,10 @@ static int gesture_process(const struct device *dev,
       .x_threshold = DT_INST_PROP(n, x_threshold),                             \
       .y_threshold = DT_INST_PROP(n, y_threshold),                             \
       .cooldown_ms = DT_INST_PROP(n, cooldown_ms),                             \
-      .swipe_left = GESTURE_BEHAVIOR_INIT(n, swipe_left_behavior),             \
-      .swipe_right = GESTURE_BEHAVIOR_INIT(n, swipe_right_behavior),           \
-      .swipe_up = GESTURE_BEHAVIOR_INIT(n, swipe_up_behavior),                 \
-      .swipe_down = GESTURE_BEHAVIOR_INIT(n, swipe_down_behavior),             \
+      .swipe_left = GESTURE_BEHAVIOR_INIT(n, swipe_left_behaviors),            \
+      .swipe_right = GESTURE_BEHAVIOR_INIT(n, swipe_right_behaviors),          \
+      .swipe_up = GESTURE_BEHAVIOR_INIT(n, swipe_up_behaviors),                \
+      .swipe_down = GESTURE_BEHAVIOR_INIT(n, swipe_down_behaviors),            \
   };                                                                           \
   DEVICE_DT_INST_DEFINE(n, NULL, NULL, &gesture_data_##n, &gesture_config_##n, \
                         POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,      \
