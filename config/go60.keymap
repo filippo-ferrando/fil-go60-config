@@ -189,10 +189,10 @@
             y-threshold = <60>;
             cooldown-ms = <250>;
 
-            swipe-left-behavior  = <&kp LG(LEFT)>;
-            swipe-right-behavior = <&kp LG(RIGHT)>;
-            swipe-up-behavior    = <&kp LG(PG_UP)>;
-            swipe-down-behavior  = <&kp LG(PG_DN)>;
+            swipe-left-behaviors  = <&kp LG(LEFT)>;   
+            swipe-right-behaviors = <&kp LG(RIGHT)>;  
+            swipe-up-behaviors    = <&kp LG(PG_UP)>;  
+            swipe-down-behaviors  = <&kp LG(PG_DN)>;  
         };
     };
 };
