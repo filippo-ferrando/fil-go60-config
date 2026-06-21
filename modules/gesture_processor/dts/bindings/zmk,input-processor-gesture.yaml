@@ -18,18 +18,19 @@ properties:
     type: phandle-array
     specifier-space: binding
     required: false
-
   swipe-right-behaviors:
     type: phandle-array
     specifier-space: binding
     required: false
-
   swipe-up-behaviors:
     type: phandle-array
     specifier-space: binding
     required: false
-
   swipe-down-behaviors:
     type: phandle-array
     specifier-space: binding
     required: false
+
+  track-remainders:
+    type: boolean
+    description: Required by ZMK core input listener macro
