@@ -42,7 +42,7 @@ static int gesture_process(const struct device *dev,
 
   if (event->type != INPUT_EV_REL ||
       (event->code != INPUT_REL_X && event->code != INPUT_REL_Y)) {
-    return 0; // Ignora tutto ciò che non è movimento X/Y
+    return 0;
   }
 
   int64_t now = k_uptime_get();
@@ -57,7 +57,7 @@ static int gesture_process(const struct device *dev,
   if (event->code == INPUT_REL_Y)
     data->acc_y += event->value;
 
-  event->value = 0; // Sopprime il movimento del mouse azzerando il valore
+  event->value = 0;
 
   if (now - data->last_trigger < cfg->cooldown_ms) {
     return -EINVAL;
@@ -85,13 +85,13 @@ static int gesture_process(const struct device *dev,
     data->last_trigger = now;
   }
 
-  return -EINVAL; // Blocca la catena, il mouse non si muoverà
+  return -EINVAL;
 }
 
-#define GESTURE_BEHAVIOR_INIT(n, prop)                                         \
+#define GESTURE_BEHAVIOR_INIT_IMPL(n, prop)                                    \
   {                                                                            \
       .behavior_dev =                                                          \
-          DEVICE_DT_GET_OR_NULL(DT_PHANDLE_BY_IDX(DT_DRV_INST(n), prop, 0)),   \
+          DT_PROP(DT_PHANDLE_BY_IDX(DT_DRV_INST(n), prop, 0), label),          \
       .param1 =                                                                \
           COND_CODE_0(DT_PHA_HAS_CELL_AT_IDX(DT_DRV_INST(n), prop, 0, param1), \
                       (0), (DT_PHA_BY_IDX(DT_DRV_INST(n), prop, 0, param1))),  \
@@ -99,6 +99,13 @@ static int gesture_process(const struct device *dev,
           COND_CODE_0(DT_PHA_HAS_CELL_AT_IDX(DT_DRV_INST(n), prop, 0, param2), \
                       (0), (DT_PHA_BY_IDX(DT_DRV_INST(n), prop, 0, param2))),  \
   }
+
+#define GESTURE_BEHAVIOR_INIT_EMPTY() {.behavior_dev = NULL}
+
+#define GESTURE_BEHAVIOR_INIT(n, prop)                                         \
+  COND_CODE_1(DT_NODE_HAS_PROP(DT_DRV_INST(n), prop),                          \
+              (GESTURE_BEHAVIOR_INIT_IMPL(n, prop)),                           \
+              (GESTURE_BEHAVIOR_INIT_EMPTY()))
 
 #define GESTURE_INST(n)                                                        \
   static struct gesture_data gesture_data_##n = {                              \
