@@ -11,7 +11,9 @@ let
     keymap = "${config}/go60.keymap"; 
     kconfig = "${config}/go60.conf"; 
   }).overrideAttrs (oldAttrs: {
-    ZMK_EXTRA_MODULES = gesture_module;
+    cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
+      "-DZMK_EXTRA_MODULES=${gesture_module}"
+    ];
   });
 
   go60_right = (firmware.zmk.override { 
@@ -19,7 +21,10 @@ let
     keymap = "${config}/go60.keymap"; 
     kconfig = "${config}/go60.conf"; 
   }).overrideAttrs (oldAttrs: {
-    ZMK_EXTRA_MODULES = gesture_module;
+    # Facciamo la stessa cosa per la metà destra
+    cmakeFlags = (oldAttrs.cmakeFlags or []) ++ [
+      "-DZMK_EXTRA_MODULES=${gesture_module}"
+    ];
   });
 
 in firmware.combine_uf2 go60_left go60_right "go60"
