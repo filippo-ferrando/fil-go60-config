@@ -8,20 +8,14 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-struct gesture_behavior {
-  const struct device *dev;
-  uint32_t param1;
-  uint32_t param2;
-};
-
 struct gesture_config {
   int32_t x_threshold;
   int32_t y_threshold;
   int32_t cooldown_ms;
-  struct gesture_behavior swipe_left;
-  struct gesture_behavior swipe_right;
-  struct gesture_behavior swipe_up;
-  struct gesture_behavior swipe_down;
+  struct zmk_behavior_binding swipe_left;
+  struct zmk_behavior_binding swipe_right;
+  struct zmk_behavior_binding swipe_up;
+  struct zmk_behavior_binding swipe_down;
 };
 
 struct gesture_data {
@@ -30,19 +24,17 @@ struct gesture_data {
   int64_t last_trigger;
 };
 
-static void invoke_behavior(const struct gesture_behavior *bhv) {
-  if (!bhv || !bhv->dev)
+static void invoke_behavior(const struct zmk_behavior_binding *binding) {
+  if (!binding || !binding->behavior_dev)
     return;
-
-  struct zmk_behavior_binding binding = {.behavior_dev = bhv->dev->name,
-                                         .param1 = bhv->param1,
-                                         .param2 = bhv->param2};
 
   struct zmk_behavior_binding_event event = {.position = 0,
                                              .timestamp = k_uptime_get()};
 
-  zmk_behavior_invoke_binding(&binding, event, true);
-  zmk_behavior_invoke_binding(&binding, event, false);
+  zmk_behavior_invoke_binding((struct zmk_behavior_binding *)binding, event,
+                              true);
+  zmk_behavior_invoke_binding((struct zmk_behavior_binding *)binding, event,
+                              false);
 }
 
 static int gesture_process(const struct device *dev,
@@ -100,8 +92,8 @@ static int gesture_process(const struct device *dev,
 
 #define GESTURE_BEHAVIOR_INIT_IMPL(n, prop)                                    \
   {                                                                            \
-      .dev =                                                                   \
-          DEVICE_DT_GET_OR_NULL(DT_PHANDLE_BY_IDX(DT_DRV_INST(n), prop, 0)),   \
+      .behavior_dev =                                                          \
+          DEVICE_DT_NAME(DT_PHANDLE_BY_IDX(DT_DRV_INST(n), prop, 0)),          \
       .param1 =                                                                \
           COND_CODE_0(DT_PHA_HAS_CELL_AT_IDX(DT_DRV_INST(n), prop, 0, param1), \
                       (0), (DT_PHA_BY_IDX(DT_DRV_INST(n), prop, 0, param1))),  \
@@ -110,7 +102,8 @@ static int gesture_process(const struct device *dev,
                       (0), (DT_PHA_BY_IDX(DT_DRV_INST(n), prop, 0, param2))),  \
   }
 
-#define GESTURE_BEHAVIOR_INIT_EMPTY() {.dev = NULL, .param1 = 0, .param2 = 0}
+#define GESTURE_BEHAVIOR_INIT_EMPTY()                                          \
+  {.behavior_dev = NULL, .param1 = 0, .param2 = 0}
 
 #define GESTURE_BEHAVIOR_INIT(n, prop)                                         \
   COND_CODE_1(DT_NODE_HAS_PROP(DT_DRV_INST(n), prop),                          \
