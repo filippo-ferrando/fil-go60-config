@@ -13,15 +13,23 @@ properties:
   cooldown-ms:
     type: int
     required: true
+
   swipe-left-behaviors:
     type: phandle-array
+    specifier-space: binding
     required: false
+
   swipe-right-behaviors:
     type: phandle-array
+    specifier-space: binding
     required: false
+
   swipe-up-behaviors:
     type: phandle-array
+    specifier-space: binding
     required: false
+
   swipe-down-behaviors:
     type: phandle-array
+    specifier-space: binding
     required: false
