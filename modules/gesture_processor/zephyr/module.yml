@@ -1,0 +1,5 @@
+name: zmk_gesture_processor
+build:
+  cmake: .
+  settings:
+    dts_root: .

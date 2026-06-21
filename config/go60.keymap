@@ -179,11 +179,29 @@
     };
 };
 
+/ {
+    input_processors {
+        zip_gesture_pad: zip_gesture_pad {
+            compatible = "zmk,input-processor-gesture";
+            #input-processor-cells = <0>;
+            
+            x-threshold = <60>;
+            y-threshold = <60>;
+            cooldown-ms = <250>;
+
+            swipe-left-behavior  = <&kp LG(LEFT)>;
+            swipe-right-behavior = <&kp LG(RIGHT)>;
+            swipe-up-behavior    = <&kp LG(PG_UP)>;
+            swipe-down-behavior  = <&kp LG(PG_DN)>;
+        };
+    };
+};
+
 &cirque_rh_listener {
     input-processors = <&zip_xy_scaler 3 1>;
     layer_2 {
-        layers = <2>;
-        input-processors = <&zip_xy_scaler 9 1>;
+        layers = <LAYER_SymbolNav>; 
+        input-processors = <&zip_gesture_pad>;
     };
 };
 

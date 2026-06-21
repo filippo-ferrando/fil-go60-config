@@ -1,0 +1,27 @@
+description: ZMK Input Processor for Touchpad Gestures
+compatible: "zmk,input-processor-gesture"
+
+include: base.yaml
+
+properties:
+  x-threshold:
+    type: int
+    required: true
+  y-threshold:
+    type: int
+    required: true
+  cooldown-ms:
+    type: int
+    required: true
+  swipe-left-behavior:
+    type: phandle-array
+    required: false
+  swipe-right-behavior:
+    type: phandle-array
+    required: false
+  swipe-up-behavior:
+    type: phandle-array
+    required: false
+  swipe-down-behavior:
+    type: phandle-array
+    required: false
