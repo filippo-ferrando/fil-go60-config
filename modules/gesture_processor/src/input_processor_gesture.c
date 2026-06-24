@@ -1,10 +1,10 @@
 #define DT_DRV_COMPAT zmk_input_processor_gesture
 
+#include <drivers/input_processor.h>
 #include <zephyr/device.h>
 #include <zephyr/input/input.h>
 #include <zephyr/kernel.h>
 #include <zmk/behavior.h>
-#include <zmk/input_processor.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
@@ -38,8 +38,10 @@ static void invoke_behavior(const struct zmk_behavior_binding *binding) {
                               false);
 }
 
-static int gesture_process(const struct device *dev,
-                           struct input_event *event) {
+static int gesture_process(const struct device *dev, struct input_event *event,
+                           uint32_t param1, uint32_t param2,
+                           struct zmk_input_processor_state *state) {
+
   const struct gesture_config *cfg = dev->config;
   struct gesture_data *data = dev->data;
 
