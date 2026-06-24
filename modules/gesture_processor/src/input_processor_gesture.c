@@ -4,6 +4,7 @@
 #include <zephyr/input/input.h>
 #include <zephyr/kernel.h>
 #include <zmk/behavior.h>
+#include <zmk/input_processor.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
@@ -90,6 +91,10 @@ static int gesture_process(const struct device *dev,
   return -EINVAL;
 }
 
+static const struct zmk_input_processor_driver_api gesture_api = {
+    .handle_event = gesture_process,
+};
+
 #define GESTURE_BEHAVIOR_INIT_IMPL(n, prop)                                    \
   {                                                                            \
       .behavior_dev =                                                          \
@@ -125,8 +130,9 @@ static int gesture_process(const struct device *dev,
       .swipe_up = GESTURE_BEHAVIOR_INIT(n, swipe_up_behaviors),                \
       .swipe_down = GESTURE_BEHAVIOR_INIT(n, swipe_down_behaviors),            \
   };                                                                           \
+  /* CHANGED: Passing &gesture_api instead of gesture_process */               \
   DEVICE_DT_INST_DEFINE(n, NULL, NULL, &gesture_data_##n, &gesture_config_##n, \
                         POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,      \
-                        gesture_process);
+                        &gesture_api);
 
 DT_INST_FOREACH_STATUS_OKAY(GESTURE_INST)

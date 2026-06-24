@@ -118,6 +118,34 @@
                 = <&out OUT_BLE>,
                   <&bt BT_SEL 3>;
         };
+        niri_swipe_l: niri_swipe_l {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <20>;
+            tap-ms = <20>;
+            bindings = <&kp LG(LEFT)>;
+        };
+        niri_swipe_r: niri_swipe_r {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <20>;
+            tap-ms = <20>;
+            bindings = <&kp LG(RIGHT)>;
+        };
+        niri_swipe_u: niri_swipe_u {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <20>;
+            tap-ms = <20>;
+            bindings = <&kp LG(PG_UP)>;
+        };
+        niri_swipe_d: niri_swipe_d {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <20>;
+            tap-ms = <20>;
+            bindings = <&kp LG(PG_DN)>;
+        };
     };
 
     keymap {
@@ -189,10 +217,10 @@
             y-threshold = <60>;
             cooldown-ms = <250>;
 
-            swipe-left-behaviors  = <&kp LG(LEFT)>;   
-            swipe-right-behaviors = <&kp LG(RIGHT)>;  
-            swipe-up-behaviors    = <&kp LG(PG_UP)>;  
-            swipe-down-behaviors  = <&kp LG(PG_DN)>;  
+            swipe-left-behaviors  = <&niri_swipe_l>;
+            swipe-right-behaviors = <&niri_swipe_r>;  
+            swipe-up-behaviors    = <&niri_swipe_u>;  
+            swipe-down-behaviors  = <&niri_swipe_d>;  
         };
     };
 };
