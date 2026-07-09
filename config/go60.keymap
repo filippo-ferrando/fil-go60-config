@@ -213,8 +213,8 @@
             compatible = "zmk,input-processor-gesture";
             #input-processor-cells = <0>;
             
-            x-threshold = <60>;
-            y-threshold = <60>;
+            x-threshold = <30>;
+            y-threshold = <30>;
             cooldown-ms = <250>;
 
             swipe-left-behaviors  = <&niri_swipe_l>;
