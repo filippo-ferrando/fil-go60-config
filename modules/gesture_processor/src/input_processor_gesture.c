@@ -30,7 +30,7 @@ static void invoke_behavior(const struct zmk_behavior_binding *binding) {
   if (!binding || !binding->behavior_dev)
     return;
 
-  struct zmk_behavior_binding_event event = {.position = 0,
+  struct zmk_behavior_binding_event event = {.position = 255,
                                              .timestamp = k_uptime_get()};
 
   zmk_behavior_invoke_binding((struct zmk_behavior_binding *)binding, event,
@@ -67,7 +67,7 @@ static int gesture_process(const struct device *dev, struct input_event *event,
   event->value = 0;
 
   if (now - data->last_trigger < cfg->cooldown_ms) {
-    return -EINVAL;
+    return 0;
   }
 
   bool triggered = false;
@@ -92,7 +92,7 @@ static int gesture_process(const struct device *dev, struct input_event *event,
     data->last_trigger = now;
   }
 
-  return -EINVAL;
+  return 0;
 }
 
 static const struct zmk_input_processor_driver_api gesture_api = {
