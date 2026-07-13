@@ -237,6 +237,6 @@
     input-processors = <&zip_xy_to_scroll_mapper>, <&zip_xy_scaler 1 8>, <&zip_click_to_right_click_mapper>;
     layer_4 {
         layers = <4>;
-        input-processors = <&zip_xy_scaler 3 1>;
+        input-processors = <&zip_xy_scaler 2 1>;
     };
 };

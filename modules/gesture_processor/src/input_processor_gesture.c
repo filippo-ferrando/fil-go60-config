@@ -23,6 +23,7 @@ struct gesture_data {
   int32_t acc_x;
   int32_t acc_y;
   int64_t last_trigger;
+  int64_t last_event;
 };
 
 static void invoke_behavior(const struct zmk_behavior_binding *binding) {
@@ -52,10 +53,11 @@ static int gesture_process(const struct device *dev, struct input_event *event,
 
   int64_t now = k_uptime_get();
 
-  if (now - data->last_trigger > cfg->cooldown_ms * 2) {
+  if (now - data->last_event > 100) {
     data->acc_x = 0;
     data->acc_y = 0;
   }
+  data->last_event = now;
 
   if (event->code == INPUT_REL_X)
     data->acc_x += event->value;
@@ -122,6 +124,7 @@ static const struct zmk_input_processor_driver_api gesture_api = {
       .acc_x = 0,                                                              \
       .acc_y = 0,                                                              \
       .last_trigger = 0,                                                       \
+      .last_event = 0,                                                         \
   };                                                                           \
   static const struct gesture_config gesture_config_##n = {                    \
       .x_threshold = DT_INST_PROP(n, x_threshold),                             \
@@ -132,7 +135,6 @@ static const struct zmk_input_processor_driver_api gesture_api = {
       .swipe_up = GESTURE_BEHAVIOR_INIT(n, swipe_up_behaviors),                \
       .swipe_down = GESTURE_BEHAVIOR_INIT(n, swipe_down_behaviors),            \
   };                                                                           \
-  /* CHANGED: Passing &gesture_api instead of gesture_process */               \
   DEVICE_DT_INST_DEFINE(n, NULL, NULL, &gesture_data_##n, &gesture_config_##n, \
                         POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,      \
                         &gesture_api);
